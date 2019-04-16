@@ -1,6 +1,7 @@
 package com.geccocrawler.gecco.downloader;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -14,12 +15,24 @@ import org.openqa.selenium.chrome.ChromeOptions;
  * @author: heyin
  * @date: 2019-04-16
  * @desc: 怎么回事，会出现验证码（用浏览器模拟出现验证码，但是真正的手动操作不会出现），这个有待研究是什么原理，
+ * 绕过chrom 无头浏览的限制 https://blog.csdn.net/Revivedsun/article/details/81785000
  */
 public class SogouwxDownloader {
 
     public static void main(String[] args) {
         System.setProperty("webdriver.chrome.driver", "D:\\programfile\\chromedriver.exe");
         ChromeOptions options = new ChromeOptions();
+        options.addArguments(
+                "--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36");
+        //
+        // File file = new File("C:\\\\Program Files (x86)\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe");
+        // options.setBinary(file);
+        // options.addArguments("--user-data-dir=C:\\Users\\yin.he\\AppData\\Local\\Google\\Chrome\\User Data");
+        options.addArguments("lang=zh_CN.UTF-8");
+        // 不加载图片
+        // options.addArguments("blink-settings=imagesEnabled=false");
+        //window.navigator.webdriver 一定不能等于true
+        options.setExperimentalOption("excludeSwitches", Arrays.asList("enable-automation"));
         WebDriver driver = new ChromeDriver(options);
         String url = "https://weixin.sogou.com/";
         driver.get(url);
