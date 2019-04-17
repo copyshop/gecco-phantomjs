@@ -1,8 +1,9 @@
 package com.geccocrawler.gecco.downloader;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
@@ -48,20 +49,24 @@ public class SogouwxDownloader {
 
         int index = 0;
         List<WebElement> webElementList = driver.findElements(By.cssSelector("div.news-box>ul.news-list>li"));
-        List<String> urlList = new ArrayList<>();
         for (WebElement element : webElementList) {
             System.out.println("====================" + (index++) + "====================");
-            WebElement wele = element.findElement(By.cssSelector(".txt-box h3 a"));
-            System.out.println(wele.getText() + " >>> " + wele.getAttribute("href"));
-            urlList.add(wele.getAttribute("href"));
+            element.findElement(By.cssSelector(".txt-box h3 a")).click();
+            System.out.println(element.getText());
         }
 
-        for (String article : urlList) {
-            driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-            System.out.println("url: " + article);
-            driver.get(article);
-            System.out.println(driver.findElement(By.tagName("body")).getText());
-            System.out.println("========================================");
+        String currentWindow = driver.getWindowHandle();
+        Set<String> allWindow = driver.getWindowHandles();
+        Iterator<String> it = allWindow.iterator();
+        while (it.hasNext()) {
+            if (currentWindow == it.next()) {
+                continue;
+            }
+            WebDriver window = driver.switchTo().window(it.next());//切换到新窗口
+            System.out.println(window.getTitle());
+            //关闭新窗口
+            window.close();
         }
+        driver.switchTo().window(currentWindow);//回到原来页面
     }
 }
