@@ -15,12 +15,11 @@ import org.openqa.selenium.chrome.ChromeOptions;
 /**
  * @author: heyin
  * @date: 2019-04-16
- * @desc: 怎么回事，会出现验证码（用浏览器模拟出现验证码，但是真正的手动操作不会出现），这个有待研究是什么原理，
- * 绕过chrom 无头浏览的限制 https://blog.csdn.net/Revivedsun/article/details/81785000
+ * @desc: 绕过chrom 无头浏览的限制 https://blog.csdn.net/Revivedsun/article/details/81785000
  */
 public class SogouwxDownloader {
-
-    public static void main(String[] args) {
+    
+    public static void main(String[] args) throws InterruptedException {
         System.setProperty("webdriver.chrome.driver", "D:\\programfile\\chromedriver.exe");
         ChromeOptions options = new ChromeOptions();
         options.addArguments(
@@ -39,30 +38,34 @@ public class SogouwxDownloader {
         driver.get(url);
         driver.findElement(By.id("query")).sendKeys(new String[] {"深圳"});
         driver.findElement(By.cssSelector("input.swz")).click();
-
+        
         driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
-
+        
         //获取当前浏览器的信息
         System.out.println("title:" + driver.getTitle());
         System.out.println("currentUrl:" + driver.getCurrentUrl());
         // System.out.println("body:" + driver.getPageSource());
-
+        
         int index = 0;
         List<WebElement> webElementList = driver.findElements(By.cssSelector("div.news-box>ul.news-list>li"));
         for (WebElement element : webElementList) {
-            System.out.println("====================" + (index++) + "====================");
+            System.out.println("====================" + (index++) + "====================" + element.findElement(By.cssSelector(".txt-box h3 a")));
             element.findElement(By.cssSelector(".txt-box h3 a")).click();
             System.out.println(element.getText());
+            Thread.sleep(5000);
         }
-
+        
+        System.out.println("+++++++++++++++++++++++++++++");
+        
         String currentWindow = driver.getWindowHandle();
         Set<String> allWindow = driver.getWindowHandles();
         Iterator<String> it = allWindow.iterator();
         while (it.hasNext()) {
-            if (currentWindow == it.next()) {
+            String windowId = it.next();
+            if (currentWindow.equals(windowId)) {
                 continue;
             }
-            WebDriver window = driver.switchTo().window(it.next());//切换到新窗口
+            WebDriver window = driver.switchTo().window(windowId);//切换到新窗口
             System.out.println(window.getTitle());
             //关闭新窗口
             window.close();
