@@ -1,7 +1,6 @@
 package com.geccocrawler.gecco.downloader;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.concurrent.TimeUnit;
 
@@ -9,9 +8,7 @@ import org.openqa.selenium.Proxy;
 import org.openqa.selenium.Proxy.ProxyType;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriverService;
-import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.ErrorHandler;
 
 import com.google.common.io.Files;
 
@@ -21,19 +18,19 @@ import com.google.common.io.Files;
  * header
  * timeout
  * proxy 不知道如何动态替换代理服务器
- * 
- * @author huchengyi
  *
+ * @author huchengyi
  */
 public class TestDownloader {
-
-	public static void main(String[] args) {
+    
+    public static void main(String[] args) {
         DesiredCapabilities dcaps = DesiredCapabilities.phantomjs();
-        dcaps.setCapability(PhantomJSDriverService.PHANTOMJS_PAGE_SETTINGS_PREFIX+"userAgent", "Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:50.0) Gecko/20100101 Firefox/50.0");
+        dcaps.setCapability(PhantomJSDriverService.PHANTOMJS_PAGE_SETTINGS_PREFIX + "userAgent",
+                "Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:50.0) Gecko/20100101 Firefox/50.0");
         dcaps.setCapability("acceptSslCerts", true);
         dcaps.setJavascriptEnabled(true);
         dcaps.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, "D:\\phantomjs-2.1.1-windows\\bin\\phantomjs.exe");
-        dcaps.setCapability(PhantomJSDriverService.PHANTOMJS_PAGE_CUSTOMHEADERS_PREFIX+"test", "test");
+        dcaps.setCapability(PhantomJSDriverService.PHANTOMJS_PAGE_CUSTOMHEADERS_PREFIX + "test", "test");
         
         Proxy proxy = new Proxy();
         proxy.setProxyType(ProxyType.MANUAL);
@@ -49,13 +46,13 @@ public class TestDownloader {
         webDriver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
         webDriver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
         try {
-        	webDriver.get("http://www.baidu.com123/");
-			Files.write(webDriver.getPageSource(), new File("zdaye.html"), Charset.forName("UTF-8"));
-		} catch (Exception e) {
-			System.out.println("-------------------------------");
-			e.printStackTrace();
-		}
-		webDriver.quit();
-	}
-
+            webDriver.get("http://www.baidu.com123/");
+            Files.write(webDriver.getPageSource(), new File("zdaye.html"), Charset.forName("UTF-8"));
+        } catch (Exception e) {
+            System.out.println("-------------------------------");
+            e.printStackTrace();
+        }
+        webDriver.quit();
+    }
+    
 }
