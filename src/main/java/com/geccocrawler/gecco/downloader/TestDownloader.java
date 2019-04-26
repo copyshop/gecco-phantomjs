@@ -8,16 +8,13 @@ import org.openqa.selenium.Proxy;
 import org.openqa.selenium.Proxy.ProxyType;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriverService;
+import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import com.google.common.io.Files;
 
 /**
- * cookie
- * post 暂时找不到方法支持
- * header
- * timeout
- * proxy 不知道如何动态替换代理服务器
+ * phantomjs 代码ip
  *
  * @author huchengyi
  */
@@ -37,11 +34,11 @@ public class TestDownloader {
         proxy.setAutodetect(false);
         String proxyStr = "127.0.0.1:8087";
         proxy.setHttpProxy(proxyStr);
-        //dcaps.setCapability(CapabilityType.PROXY, proxy);
+        dcaps.setCapability(CapabilityType.PROXY, proxy);
         
         PhantomJSDriver webDriver = new PhantomJSDriver(dcaps);
-        //proxy = (Proxy)webDriver.getCapabilities().getCapability(CapabilityType.PROXY);
-        //proxy.setHttpProxy("127.0.0.1:8081");
+        proxy = (Proxy) webDriver.getCapabilities().getCapability(CapabilityType.PROXY);
+        proxy.setHttpProxy("127.0.0.1:8081");
         System.out.println(webDriver.getErrorHandler().isIncludeServerErrors());
         webDriver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
         webDriver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
