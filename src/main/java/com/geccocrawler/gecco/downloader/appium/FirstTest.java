@@ -41,7 +41,7 @@ public class FirstTest {
 
         String result = driver.findElement(By.id("com.android.calculator2:id/formula")).getText();
         System.out.println(result);
-        Thread.sleep(Integer.MAX_VALUE);
+        driver.quit();
 
     }
 }
